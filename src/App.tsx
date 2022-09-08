@@ -8,6 +8,7 @@ import { ReactComponent as Shuffle } from './assets/shuffle.svg';
 import styled from 'styled-components';
 import { MovieStore } from './store/MovieStore';
 import { Providers } from './components/providers';
+import { Box, Modal, Typography } from '@mui/material';
 
 const movieStore = new MovieStore([]);
 
@@ -19,10 +20,11 @@ function App() {
   const [movie, setMovie] = useState<Movie>({ title: '' } as Movie);
   const [moviePosterPath, setMoviePosterPath] = useState('');
   const [movieProviders, setMovieProviders] = useState<ProviderInfo[]>([] as ProviderInfo[])
+  const [modalVisibility, setModalVisibility] = useState(false);
 
   const renderNewMovie = () => {
     if (movieStore.getMoviesShownLength() === getMoviesArrayLength()) {
-      alert('Você atingiu o limite máximo de filmes permitidos!');
+      setModalVisibility(true);
     } else {
       movieStore.setNewMovie()
       setTimeout(async () => {
@@ -38,6 +40,21 @@ function App() {
   return (
     <div className="App">
       <Header />
+
+      <Modal
+        open={modalVisibility}
+        onClose={() => setModalVisibility(false)}
+      >
+        <Box sx={style}>
+          <Typography style={titleTextStyle} variant="h4" component="h4">
+            Limite atingido
+          </Typography>
+          <Typography style={descriptionTextStyle} sx={{ mt: 8 }}>
+            Você atingiu o limite máximo de filmes permitidos!
+            Recarregue a página para ver mais.
+          </Typography>
+        </Box>
+      </Modal>
       
       {
         movie.title === '' ?
@@ -106,3 +123,31 @@ const ButtonText = styled.p`
   position: absolute;
   transform: translate(-50%, -50%);
 `
+
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  width: '30rem',
+  height: '13rem',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: '#092479',
+  pt: 2,
+  px: 4,
+  pb: 3,
+  borderRadius: '.8rem',
+  border: '1px solid white',
+};
+
+const titleTextStyle = {
+  color: 'white',
+  fontFamily: 'Poppins',
+  fontWeight: '500'
+}
+
+const descriptionTextStyle = {
+  color: 'white',
+  fontFamily: 'Poppins',
+  fontSize: '16px',
+  fontWeight: '500'
+}

@@ -7,7 +7,7 @@ interface MovieProps {
   posterPath: string
 }
 
-export class MovieStore{
+export class MovieStore {
   constructor(
     private movies: Array<MovieProps>
   ){}
@@ -33,7 +33,7 @@ export class MovieStore{
     this.movies.push({ movie: newMovie, posterPath: newMoviePosterPath })
   }
 
-  getMoviesShownLength = () =>{
+  getMoviesShownLength = () => {
     return this.movies.length;
   }
 

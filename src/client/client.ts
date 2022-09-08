@@ -16,6 +16,7 @@ const moviesArray: Movie[] = [];
 export const loadMovies = async (): Promise<void> => {
   const randomPages: number[] = []
   
+  //limitado a uma página somente por enquanto, porém, quanto maior a qtde de filmes que se deseja, maior esse nro
   for (let page = 0; page < 1; page++) {
     let newRandomPage = Math.floor(Math.random() * 100) + 1;
 
@@ -27,13 +28,14 @@ export const loadMovies = async (): Promise<void> => {
     randomPages.push(newRandomPage)
   }
 
-  randomPages.forEach(async (page) => {
-    const fetchedMovies: InfoProps = await fetchItem(`/movie/popular?api_key=${token}&page=${page}&language=pt-BR`);
+  for (let pageIndex = 0; pageIndex < randomPages.length; pageIndex++) {
+    const fetchedMovies: InfoProps = 
+      await fetchItem(`/movie/popular?api_key=${token}&page=${randomPages[pageIndex]}&language=pt-BR`);
     
     fetchedMovies.results.forEach((movie) => {
       moviesArray.push(movie)
     })
-  })
+  }
 }
 
 export const getRandomMovie = (): Movie => {
